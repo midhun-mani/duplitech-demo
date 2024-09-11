@@ -9,12 +9,13 @@ phases:
       - echo Configuring rclone for Wasabi and S3 using IAM roles...
       - |
         rclone config create wasabi s3 \
-          env_auth=false \
-          access_key_id=$WASABI_ACCESS_KEY \
-          secret_access_key=$WASABI_SECRET_KEY \
-          endpoint=$WASABI_ENDPOINT \
-          region=$WASABI_REGION \
-          acl=private
+        env_auth=false \
+        access_key_id=$WASABI_ACCESS_KEY \
+        secret_access_key=$WASABI_SECRET_KEY \
+        endpoint=$WASABI_ENDPOINT \
+        region=$WASABI_REGION \
+        acl=private \
+        provider=Wasabi
       - |
         rclone config create s3 s3 \
           env_auth=true \
