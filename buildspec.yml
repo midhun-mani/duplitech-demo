@@ -25,13 +25,13 @@ phases:
   build:
     commands:
       - echo Starting dry run for migration from Wasabi to S3...
-      - rclone copy --dry-run --files-from copylist.txt wasabi:duplitech-samsung/poc/ s3:wasabi-to-s3-automated-data-transfer-logs/wasabi-files/ --progress -vv
+      - rclone copy --dry-run --files-from copylist.txt wasabi:duplitech-samsung/poc/ s3:wasabi-to-s3-automated-data-transfer-logs/wasabi-files/  -vv
       - echo "Dry run successful. Proceeding with actual migration..."
       - echo Generating timestamp and log file name...
       - TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
       - LOG_FILE="transfer-log-${TIMESTAMP}.txt"
       - echo Starting actual migration from Wasabi to S3...
-      - rclone copy --files-from copylist.txt wasabi:duplitech-samsung/poc/ s3:wasabi-to-s3-automated-data-transfer-logs/wasabi-files/ --progress -vv --log-file=$LOG_FILE
+      - rclone copy --files-from copylist.txt wasabi:duplitech-samsung/poc/ s3:wasabi-to-s3-automated-data-transfer-logs/wasabi-files/  -vv --log-file=$LOG_FILE
       - echo "Migration completed successfully."
       - echo Uploading log file to S3...
       - aws s3 cp $LOG_FILE s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/
