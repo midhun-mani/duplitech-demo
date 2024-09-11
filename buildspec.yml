@@ -38,16 +38,14 @@ phases:
       - LOG_FILE="transfer-log-${TIMESTAMP}.txt"
       
       - |
-        if rclone copy --files-from copylist.txt wasabi:duplitech-samsung/poc/ s3:wasabi-to-s3-automated-data-transfer-logs/wasabi-files/ --progress -vv  2>&1 | tee /dev/tty | tee $LOG_FILE ; then
+        if rclone copy --files-from copylist.txt wasabi:duplitech-samsung/poc/ s3:wasabi-to-s3-automated-data-transfer-logs/wasabi-files/ --progress -vv --log-file $LOG_FILE; then
           echo "Migration completed successfully."
-          
         else
           echo "Migration failed." >&2
           echo "Uploading log file to S3..."
           aws s3 cp $LOG_FILE s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/
           exit 1
         fi
-
       - echo "Uploading log file to S3..."
       - aws s3 cp $LOG_FILE s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/
 
