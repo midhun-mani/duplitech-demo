@@ -1,0 +1,6 @@
+wasabi-file-1.txt
+wasabi-file-2.txt
+wasabi-file-3.txt
+wasabi-file-4.txt
+wasabi-file-5.txt
+test
