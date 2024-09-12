@@ -61,8 +61,8 @@ phases:
       - echo Invoking Lambda function...
       - |
         aws lambda invoke --function-name wasabi-to-s3-automated-data-transfer-logging \
-        --payload "{\"fileList\": $FILE_LIST, \"logFileS3Path\": \"s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/$LOG_FILE\", \"status\": \"$STATUS\", \"errorMessage\": \"$ERROR_MESSAGE\", \"deliveryDate\": \"$DELIVERY_DATE\", \"deliveryHour\": \"$DELIVERY_HOUR\"}" \
-        response.json
+        --payload "$(echo '{"fileList": '"$FILE_LIST"', "logFileS3Path": "s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/'"$LOG_FILE"'", "status": "'"$STATUS"'", "errorMessage": "'"$ERROR_MESSAGE"'", "deliveryDate": "'"$DELIVERY_DATE"'", "deliveryHour": "'"$DELIVERY_HOUR"'"}')" \
+        --cli-binary-format raw-in-base64-out response.json
 
       - echo "Lambda function invocation result"
       - cat response.json 
