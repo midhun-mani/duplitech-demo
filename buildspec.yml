@@ -32,7 +32,7 @@ phases:
         MAX_RETRIES=2
         STATUS="failure"
         while [ $RETRY_COUNT -le $MAX_RETRIES ]; do
-          if rclone copy --files-from copylist.txt wasabi:duplitech-samsung/poc/ s3:wasabi-to-s3-automated-data-transfer-logs/wasabi-files/ -vv --log-file $LOG_FILE; then
+          if rclone copy --files-from copylist.txt wasabi:duplitech-samsung/Source/ s3:wasabi-to-s3-automated-data-transfer-logs/wasabi-files/ -vv --log-file $LOG_FILE; then
             echo "Migration completed successfully."
             STATUS="success"
             ERROR_MESSAGE=""
