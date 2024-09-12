@@ -1,7 +1,6 @@
-wasabi-file-1.txt
-wasabi-file-2.txt
-wasabi-file-3.txt
-wasabi-file-4.txt
-wasabi-file-5.txt
-test
-test.mp4
+TST_TestSeriesLinearVod_S01_E01_en.mp4
+TST_TestSeriesLinearVod_S01_en.jpg
+TST_TestSeriesLinearVod_S01_E01_en_TT.jpg
+TST_TestSeriesLinearVod_S01_E01_en.jpg
+TST_TestSeriesLinearVod_S01_E01_en.vtt
+TST_TestSeriesLinearVod_en.jpg
