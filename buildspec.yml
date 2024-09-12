@@ -61,7 +61,7 @@ phases:
         aws lambda invoke --function-name wasabi-to-s3-automated-data-transfer-logging \
         --payload '{"fileList": '$FILE_LIST', "logFileS3Path": "s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/'$LOG_FILE'", "status": "'"$STATUS"'", "errorMessage": "'"$ERROR_MESSAGE"'", "deliveryDate": "'"$DELIVERY_DATE"'", "deliveryHour": "'"$DELIVERY_HOUR"'"}' \
         response.json
-      - echo Lambda function invocation result:
+      - echo "Lambda function invocation result"
       - cat response.json 
       - |
         if [ "$STATUS" = "failure" ]; then
