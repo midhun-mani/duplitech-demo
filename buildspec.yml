@@ -51,7 +51,7 @@ phases:
             echo "Migration attempt $((RETRY_COUNT + 1)) failed." >&2
             RETRY_COUNT=$((RETRY_COUNT + 1))
             STATUS="failure"
-            ERROR_MESSAGE="Failed after $RETRIES attempt(s)"
+            ERROR_MESSAGE="Failed after $RETRY_COUNT attempt(s)"
             sleep 10 # Wait before retrying
           fi
         done
