@@ -4,3 +4,4 @@ wasabi-file-3.txt
 wasabi-file-4.txt
 wasabi-file-5.txt
 test
+test.mp4
