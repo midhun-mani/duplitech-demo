@@ -67,6 +67,23 @@ phases:
       - echo "Uploading log file to S3..."
       - aws s3 cp $LOG_FILE s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/
 
+post_build:
+    commands:
+      - echo Capturing current timestamp...
+      - DELIVERY_DATE=$(TZ="America/Los_Angeles" date +%m-%d-%y)
+      - DELIVERY_HOUR=$(TZ="America/Los_Angeles" date +%H)
+  
+      - echo Creating file list from copylist.txt...
+      - FILE_LIST=$(cat copylist.txt | jq -R -s -c 'split("\n") | map(select(length > 0))')
+  
+      - echo Invoking Lambda function...
+      - |
+        aws lambda invoke --function-name wasabi-to-s3-automated-data-transfer-logging \
+        --payload '{"fileList": '$FILE_LIST', "logFileS3Path": "s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/'$LOG_FILE'", "status": "'"$STATUS"'", "errorMessage": "'"$ERROR_MESSAGE"'", "deliveryDate": "'"$DELIVERY_DATE"'", "deliveryHour": "'"$DELIVERY_HOUR"'"}' \
+        response.json
+      - echo Lambda function invocation result:
+      - cat response.json      
+
 artifacts:
   files:
     - copylist.txt
