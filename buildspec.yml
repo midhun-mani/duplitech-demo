@@ -24,19 +24,7 @@ phases:
 
   build:
     commands:
-      - echo Starting dry run for migration from Wasabi to S3...
-      - |
-        if rclone copy --dry-run --files-from copylist.txt wasabi:duplitech-samsung/poc/ s3:wasabi-to-s3-automated-data-transfer-logs/wasabi-files/ --progress -vv; then
-          echo "Dry run completed successfully."
-        else
-          echo "Dry run failed." >&2
-          exit 1
-        fi
-      - echo "Dry run successful. Proceeding with actual migration..."
-        
-      - TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
-      - LOG_FILE="transfer-log-${TIMESTAMP}.txt"
-      
+      - echo Starting  migration from Wasabi to S3...
       - |
         RETRY_COUNT=0
         MAX_RETRIES=2
@@ -51,23 +39,15 @@ phases:
             echo "Migration attempt $((RETRY_COUNT + 1)) failed." >&2
             RETRY_COUNT=$((RETRY_COUNT + 1))
             STATUS="failure"
-            ERROR_MESSAGE="Failed after $RETRY_COUNT attempt(s)"
+            ERROR_MESSAGE="Failed after $RETRIES attempt(s)"
             sleep 10 # Wait before retrying
           fi
         done
 
-        if [ "$STATUS" = "failure" ]; then
-          echo "Uploading log file to S3..."
-          echo $ERROR_MESSAGE
-          aws s3 cp $LOG_FILE s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/
-          exit 1
-        fi
-
-
       - echo "Uploading log file to S3..."
       - aws s3 cp $LOG_FILE s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/
 
-post_build:
+  post_build:
     commands:
       - echo Capturing current timestamp...
       - DELIVERY_DATE=$(TZ="America/Los_Angeles" date +%m-%d-%y)
@@ -82,7 +62,17 @@ post_build:
         --payload '{"fileList": '$FILE_LIST', "logFileS3Path": "s3://wasabi-to-s3-automated-data-transfer-logs/transfer-logs/'$LOG_FILE'", "status": "'"$STATUS"'", "errorMessage": "'"$ERROR_MESSAGE"'", "deliveryDate": "'"$DELIVERY_DATE"'", "deliveryHour": "'"$DELIVERY_HOUR"'"}' \
         response.json
       - echo Lambda function invocation result:
-      - cat response.json      
+      - cat response.json 
+      - |
+        if [ "$STATUS" = "failure" ]; then
+          echo $ERROR_MESSAGE
+          exit 1
+        else
+          echo "Migration completed successfully."
+        fi
+
+
+      
 
 artifacts:
   files:
